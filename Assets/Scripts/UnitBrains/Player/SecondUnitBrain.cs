@@ -46,10 +46,33 @@ namespace UnitBrains.Player
             // Homework 1.4 (1st block, 4rd module)
             ///////////////////////////////////////
             List<Vector2Int> result = GetReachableTargets();
+
+            float minDistance = float.MaxValue; //Буферная переменная для самой короткой дистанции до базы
+            Vector2Int target = Vector2Int.zero; //Буферная переменная для хранения цели, которая ближе всего к базе
+
+            foreach (var obj in result) 
+            {
+                float distance = DistanceToOwnBase(obj);
+                //Если дистанция цели меньше предыдущей, сохраняю дистанцию и цель
+                if (minDistance < distance)
+                {
+                    target = obj;
+                    minDistance = distance;
+                }
+            }
+            
+            //Очистка списка
             while (result.Count > 1)
             {
                 result.RemoveAt(result.Count - 1);
             }
+
+            //Проверяю, найдена ближайщая цель, через сравнение дистанции с максимальным значением типа данных float
+            if (minDistance != float.MaxValue)
+            {
+                result.Add(target); //Добавление в список, самую ближайщую цель к базе
+            }
+
             return result;
             ///////////////////////////////////////
         }
